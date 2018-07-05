@@ -36,7 +36,16 @@ void loop() {
 	if (estado_pulsador == LOW && inicio_pulsacion != 0) {
 
 		t_pulsado = millis() - inicio_pulsacion;
+		
+		//Serial.println(t_pulsado/10);
+
+		if (t_pulsado < 2000 && t_pulsado != 0) {
+			
+			Serial.println("menor de 2");
+		}
+		else {
+			Serial.println("mayor de 2");
+		}
 		inicio_pulsacion = 0;
-		Serial.println(t_pulsado/10);
 	}
 }
