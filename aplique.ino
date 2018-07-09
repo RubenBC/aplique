@@ -10,6 +10,8 @@ En este programa se ha programado la impresion cada segundo con una funcion puls
 #include <FastLED.h>
 #define NUM_LEDS 95
 #define DATA_PIN 6
+int superior[] = {31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,51,53,54,55,56,
+					57,58,59,60,61,62,63,64,65,66,67,68};
 CRGB leds[NUM_LEDS];
 
 
@@ -43,6 +45,7 @@ void setup() {
 	pinMode(pulsador1, INPUT);
 
 	Serial.begin(115200);
+
 }
 
 void loop() {
@@ -79,11 +82,11 @@ void loop() {
 		// Si encendido es false lo pongo a true y enciendo  el led
 		if (encendido == false) {
 			encendido = true;
-			digitalWrite(ledverde,0);
+			encenderSuperior();
 		}
 		// si encendido es true lo pongo a false y apago el led
 		else { encendido = false; 
-		digitalWrite(ledverde, 1);
+		apagarSuperior();
 		}
 		P1_corta = 0;
 	}
@@ -97,4 +100,26 @@ void loop() {
 	}
 
 
-}//fin de programa
+}//fin loop
+
+void encenderSuperior()
+{
+	for (byte i = 0; i < 38; i++)
+	{
+		FastLED.setBrightness(250);
+		leds[superior[i]] = CRGB(250, 250, 140);
+	}
+	FastLED.show();
+	delay(10);
+}
+
+void apagarSuperior()
+{
+	for (byte i = 0; i < 38; i++)
+	{
+		FastLED.setBrightness(250);
+		leds[superior[i]] = CRGB(0, 0, 0);
+	}
+	FastLED.show();
+	delay(10);
+}
