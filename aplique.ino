@@ -1,51 +1,89 @@
-int led = 2;
-int pulsador = 4;
+/*mido el tiempor de pulsacion 1
+si es menos de 500ms se activa  P1_corta y enciendo led verde
+si es mas de 500 ms se activa P2_larga y apago led verde
+
+En este programa se ha programado la impresion cada segundo con una funcion pulso.
+
+*/
+int pulsador1 = 4;
+int ledverde = 2;
+
 
 
 
 //PULSACION
-boolean estado_pulsador;
-boolean corta;
-boolean larga;
+boolean pul_1;
+boolean P1_corta;
+boolean P1_larga;
 
 //temporizacion para pulsadores
+unsigned long T_inicio_pulsacion = 0;
+unsigned long T_pulsado = 0;
 
-unsigned long inicio_pulsacion = 0;
-unsigned long t_pulsado = 0;
+// Estados de luz
+byte modo_luz = 0;
+byte estado_luz;
+boolean encendido = false;
 
 
 
 void setup() {
-	pinMode(led, OUTPUT);
-	pinMode(pulsador, INPUT);
-
-
+	pinMode(ledverde, OUTPUT);
+	digitalWrite(ledverde, 1);
+	pinMode(pulsador1, INPUT);
 	Serial.begin(115200);
 }
 
 void loop() {
 	//leo el estado de las entradas
-	estado_pulsador = digitalRead(pulsador);
+	pul_1 = digitalRead(pulsador1);
 
-	if (estado_pulsador == HIGH && inicio_pulsacion == 0) {
-		inicio_pulsacion = millis();//inicializo el tiempo e impido que vuelva a funcionara hasta T_actual valga cero,
+	if (pul_1 == HIGH && T_inicio_pulsacion == 0) {
+		T_inicio_pulsacion = millis();//inicializo el tiempo e impido que vuelva a funcionara hasta T_actual valga cero,
 
 
 	}
-	//calculo de la duraccion de la pulsación (T_pulsado)inicio_pulsacion
-	if (estado_pulsador == LOW && inicio_pulsacion != 0) {
 
-		t_pulsado = millis() - inicio_pulsacion;
-		
-		//Serial.println(t_pulsado/10);
+	//calculo de la duraccion de la pulsación (T_pulsado)T_inicio_pulsacion
+	if (pul_1 == LOW && T_inicio_pulsacion != 0) {
 
-		if (t_pulsado < 2000 && t_pulsado != 0) {
-			
-			Serial.println("menor de 2");
-		}
-		else {
-			Serial.println("mayor de 2");
-		}
-		inicio_pulsacion = 0;
+		T_pulsado = millis() - T_inicio_pulsacion;
+		T_inicio_pulsacion = 0;
 	}
-}
+
+	if (T_pulsado>20 && T_pulsado<500) {
+		P1_corta = 1;
+		T_pulsado = 0;
+
+	}
+
+	if (T_pulsado >= 500) {
+		P1_larga = 1;
+		T_pulsado = 0;
+
+	}
+
+	if (P1_corta == 1) {
+		Serial.println("pulsacion corta");
+		// Si encendido es false lo pongo a true y enciendo  el led
+		if (encendido == false) {
+			encendido = true;
+			digitalWrite(ledverde,0);
+		}
+		// si encendido es true lo pongo a false y apago el led
+		else { encendido = false; 
+		digitalWrite(ledverde, 1);
+		}
+		P1_corta = 0;
+	}
+
+	if (P1_larga == 1) {
+		Serial.println("larga");
+		estado_luz = modo_luz++;
+		Serial.println(estado_luz);
+
+		P1_larga = 0;
+	}
+
+
+}//fin de programa
