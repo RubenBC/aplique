@@ -117,7 +117,7 @@ void apagarSuperior()
 {
 	for (byte i = 0; i < 38; i++)
 	{
-		FastLED.setBrightness(250);
+		FastLED.setBrightness(0);
 		leds[superior[i]] = CRGB(0, 0, 0);
 	}
 	FastLED.show();
