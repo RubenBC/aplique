@@ -16,8 +16,6 @@ CRGB leds[NUM_LEDS];
 
 
 int pulsador1 = 4;
-int ledverde = 2;
-
 
 
 
@@ -33,15 +31,12 @@ unsigned long T_pulsado = 0;
 // Estados de luz
 byte modo_luz = 0;
 byte estado_luz;
-boolean encendido = false;
 
 
 
 void setup() {
 	FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
 
-	pinMode(ledverde, OUTPUT);
-	digitalWrite(ledverde, 1);
 	pinMode(pulsador1, INPUT);
 
 	Serial.begin(115200);
@@ -53,7 +48,7 @@ void loop() {
 	pul_1 = digitalRead(pulsador1);
 
 	if (pul_1 == HIGH && T_inicio_pulsacion == 0) {
-		T_inicio_pulsacion = millis();//inicializo el tiempo e impido que vuelva a funcionara hasta T_actual valga cero,
+		T_inicio_pulsacion = millis(); //inicializo el tiempo e impido que vuelva a funcionara hasta T_actual valga cero,
 
 
 	}
@@ -76,31 +71,41 @@ void loop() {
 		T_pulsado = 0;
 
 	}
-
+	// PULSACION CORTA
 	if (P1_corta == 1) {
 		Serial.println("pulsacion corta");
-		// Si encendido es false lo pongo a true y enciendo  el led
-		if (encendido == false) {
-			encendido = true;
+		estado_luz = modo_luz++;
+		if (estado_luz == 0) {
+			apagar();
 			encenderSuperior();
 		}
-		// si encendido es true lo pongo a false y apago el led
-		else { encendido = false; 
-		apagarSuperior();
+		if (estado_luz == 1) {
+			apagar();
+			rainbow();
 		}
+		if (estado_luz == 2){
+			apagar();
+			leer();
+		}
+		if (estado_luz == 3) {
+			modo_luz = 0;
+			encenderSuperior();
+		}
+
+		Serial.println(estado_luz);
 		P1_corta = 0;
 	}
 
+	// PULSACION LARGA
 	if (P1_larga == 1) {
-		Serial.println("larga");
-		estado_luz = modo_luz++;
-		Serial.println(estado_luz);
+			apagar();
+		}
 
 		P1_larga = 0;
 	}
 
 
-}//fin loop
+//fin loop
 
 void encenderSuperior()
 {
@@ -113,13 +118,84 @@ void encenderSuperior()
 	delay(10);
 }
 
-void apagarSuperior()
+void apagar()
 {
-	for (byte i = 0; i < 38; i++)
+	for (byte i = 0; i < 95; i++)
 	{
 		FastLED.setBrightness(0);
-		leds[superior[i]] = CRGB(0, 0, 0);
+		leds[i] = CRGB(0, 0, 0);
 	}
 	FastLED.show();
 	delay(10);
+}
+
+void rainbow() {
+	for (byte i = 0; i < 10; i++)
+	{
+		FastLED.setBrightness(255);
+		leds[i] = CRGB(255, 0, 255);  // violeta
+		delay(2);
+		FastLED.show();
+	}
+	for (byte i = 10; i < 20; i++)
+	{
+		FastLED.setBrightness(255);
+		leds[i] = CRGB(50, 0, 110); // morado
+		delay(2);
+		FastLED.show();
+	}
+	for (byte i = 20; i < 30; i++)
+	{
+		FastLED.setBrightness(255);
+		leds[i] = CRGB(0, 0, 255); // azul
+		delay(2);
+		FastLED.show();
+	}
+	for (byte i = 30; i < 41; i++)
+	{
+		FastLED.setBrightness(255);
+		leds[i] = CRGB(0, 255, 0); // verde
+		delay(2);
+		FastLED.show();
+	}
+	for (byte i = 41; i < 52; i++)
+	{
+		FastLED.setBrightness(255);
+		leds[i] = CRGB(255, 255, 0); // amarillo
+		delay(2);
+		FastLED.show();
+	}
+	for (byte i = 52; i < 63; i++)
+	{
+		FastLED.setBrightness(255);
+		leds[i] = CRGB(255, 127, 0); // naranja
+		delay(2);
+		FastLED.show();
+	}
+	for (byte i = 63; i < 73; i++)
+	{
+		FastLED.setBrightness(255);
+		leds[i] = CRGB(255, 0, 0); // rojo
+		delay(2);
+		FastLED.show();
+	}
+	for (byte i = 73; i < 95; i++)
+	{
+		FastLED.setBrightness(255);
+		leds[i] = CRGB(255, 255, 255); // blanco
+		delay(2);
+		FastLED.show();
+	}
+
+}
+
+void leer() {
+	for (byte i = 0; i < 95; i++)
+	{
+		FastLED.setBrightness(255);
+		leds[i] = CRGB(255, 255, 255); // blanco
+		delay(1);
+		FastLED.show();
+	}
+	
 }
