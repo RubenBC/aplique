@@ -10,7 +10,7 @@ En este programa se ha programado la impresion cada segundo con una funcion puls
 #include <FastLED.h>
 #define NUM_LEDS 95
 #define DATA_PIN 6
-int superior[] = {31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,51,53,54,55,56,
+int superior[] = {31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,
 					57,58,59,60,61,62,63,64,65,66,67,68};
 CRGB leds[NUM_LEDS];
 
@@ -77,19 +77,23 @@ void loop() {
 		estado_luz = modo_luz++;
 		if (estado_luz == 0) {
 			apagar();
+			Serial.println("enciendo superior");
 			encenderSuperior();
 		}
 		if (estado_luz == 1) {
 			apagar();
+			Serial.println("enciendo rainbow");
 			rainbow();
 		}
 		if (estado_luz == 2){
 			apagar();
+			Serial.println("enciendo todo");
 			leer();
 		}
 		if (estado_luz == 3) {
 			modo_luz = 0;
-			encenderSuperior();
+			apagar();
+			Serial.println("vuelvo a encender superior");
 		}
 
 		Serial.println(estado_luz);
@@ -114,19 +118,19 @@ void encenderSuperior()
 		FastLED.setBrightness(250);
 		leds[superior[i]] = CRGB(250, 250, 140);
 	}
+	delay(50);
 	FastLED.show();
-	delay(10);
 }
 
-void apagar()
-{
+void apagar() {
+
 	for (byte i = 0; i < 95; i++)
 	{
 		FastLED.setBrightness(0);
 		leds[i] = CRGB(0, 0, 0);
 	}
+	delay(50);
 	FastLED.show();
-	delay(10);
 }
 
 void rainbow() {
@@ -134,58 +138,52 @@ void rainbow() {
 	{
 		FastLED.setBrightness(255);
 		leds[i] = CRGB(255, 0, 255);  // violeta
-		delay(2);
-		FastLED.show();
+
 	}
 	for (byte i = 10; i < 20; i++)
 	{
 		FastLED.setBrightness(255);
 		leds[i] = CRGB(50, 0, 110); // morado
-		delay(2);
-		FastLED.show();
+
 	}
 	for (byte i = 20; i < 30; i++)
 	{
 		FastLED.setBrightness(255);
 		leds[i] = CRGB(0, 0, 255); // azul
-		delay(2);
-		FastLED.show();
+
 	}
 	for (byte i = 30; i < 41; i++)
 	{
 		FastLED.setBrightness(255);
 		leds[i] = CRGB(0, 255, 0); // verde
-		delay(2);
-		FastLED.show();
+;
 	}
 	for (byte i = 41; i < 52; i++)
 	{
 		FastLED.setBrightness(255);
 		leds[i] = CRGB(255, 255, 0); // amarillo
-		delay(2);
-		FastLED.show();
+
 	}
 	for (byte i = 52; i < 63; i++)
 	{
 		FastLED.setBrightness(255);
 		leds[i] = CRGB(255, 127, 0); // naranja
-		delay(2);
-		FastLED.show();
+
 	}
 	for (byte i = 63; i < 73; i++)
 	{
 		FastLED.setBrightness(255);
 		leds[i] = CRGB(255, 0, 0); // rojo
-		delay(2);
-		FastLED.show();
+
 	}
 	for (byte i = 73; i < 95; i++)
 	{
 		FastLED.setBrightness(255);
 		leds[i] = CRGB(255, 255, 255); // blanco
-		delay(2);
-		FastLED.show();
+
 	}
+	delay(50);
+	FastLED.show();
 
 }
 
@@ -194,8 +192,7 @@ void leer() {
 	{
 		FastLED.setBrightness(255);
 		leds[i] = CRGB(255, 255, 255); // blanco
-		delay(1);
-		FastLED.show();
 	}
-	
+	delay(50);
+	FastLED.show();
 }
