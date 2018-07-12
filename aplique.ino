@@ -91,8 +91,15 @@ void loop() {
 			leer();
 		}
 		if (estado_luz == 3) {
+			apagar();
+			delay(50);
+			Serial.println("enciendo todo");
+			calida();
+		}
+		if (estado_luz == 4) {
 			modo_luz = 0;
 			apagar();
+			delay(50);
 			Serial.println("vuelvo a encender superior");
 		}
 
@@ -192,6 +199,17 @@ void leer() {
 	{
 		FastLED.setBrightness(255);
 		leds[i] = CRGB(255, 255, 255); // blanco
+	}
+	delay(50);
+	FastLED.show();
+}
+
+void calida() {
+
+	for (byte i = 0; i < 95; i++)
+	{
+		FastLED.setBrightness(250);
+		leds[i] = CRGB(250, 250, 50);
 	}
 	delay(50);
 	FastLED.show();
