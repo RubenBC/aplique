@@ -110,6 +110,7 @@ void loop() {
 	// PULSACION LARGA
 	if (P1_larga == 1) {
 			apagar();
+			modo_luz = 0;
 		}
 
 		P1_larga = 0;
