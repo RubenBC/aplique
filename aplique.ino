@@ -78,25 +78,30 @@ void loop() {
 		if (estado_luz == 0) {
 			apagar();
 			Serial.println("enciendo superior");
-			encenderSuperior();
+			muy_tenue();
 		}
 		if (estado_luz == 1) {
 			apagar();
 			Serial.println("enciendo rainbow");
-			rainbow();
+			encenderSuperior();
 		}
 		if (estado_luz == 2){
 			apagar();
 			Serial.println("enciendo todo");
-			leer();
+			calida();
 		}
 		if (estado_luz == 3) {
 			apagar();
 			delay(50);
 			Serial.println("enciendo todo");
-			calida();
+			leer();
 		}
 		if (estado_luz == 4) {
+			delay(50);
+			Serial.println("vuelvo a encender superior");
+			rainbow();
+		}
+		if (estado_luz == 5) {
 			modo_luz = 0;
 			apagar();
 			delay(50);
@@ -208,6 +213,16 @@ void leer() {
 void calida() {
 
 	for (byte i = 0; i < 95; i++)
+	{
+		FastLED.setBrightness(250);
+		leds[i] = CRGB(250, 250, 50);
+	}
+	delay(50);
+	FastLED.show();
+}
+
+void muy_tenue() {
+	for (byte i = 0; i < 95; i = i+10)
 	{
 		FastLED.setBrightness(250);
 		leds[i] = CRGB(250, 250, 50);
